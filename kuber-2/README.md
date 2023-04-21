@@ -27,12 +27,10 @@ atman@aurora:~$ yc compute instance list
 +----------------------+---------+---------------+---------+----------------+-------------+
 |          ID          |  NAME   |    ZONE ID    | STATUS  |  EXTERNAL IP   | INTERNAL IP |
 +----------------------+---------+---------------+---------+----------------+-------------+
-| epd6opnailjn41717vim | master3 | ru-central1-b | RUNNING | 51.250.111.221 | 10.129.0.21 |
-| epda9kb2turobv0t0mlc | master1 | ru-central1-b | RUNNING | 84.201.140.199 | 10.129.0.29 |
-| epde3uobal513abb4q11 | skyn2   | ru-central1-b | RUNNING | 84.201.141.246 | 10.129.0.7  |
-| epdjq5jcek91oqabeeuc | skyn1   | ru-central1-b | RUNNING | 84.201.161.254 | 10.129.0.18 |
-| epdkj5s8kbin8mhpdqgu | skyn3   | ru-central1-b | RUNNING | 51.250.18.74   | 10.129.0.6  |
-| epdkjh1nlo4vejkoev8u | master2 | ru-central1-b | RUNNING | 51.250.101.95  | 10.129.0.8  |
+| epda9kb2turobv0t0mlc | master  | ru-central1-b | RUNNING | 154.201.10.199 | 10.129.0.34 |
+| epde3uobal513abb4q11 | skyn2   | ru-central1-b | RUNNING | 84.241.143.201 | 10.129.0.27 |
+| epdjq5jcek91oqabeeuc | skyn1   | ru-central1-b | RUNNING | 84.205.151.251 | 10.129.0.5  |
+| epdkj5s8kbin8mhpdqgu | skyn3   | ru-central1-b | RUNNING | 58.50.184.74   | 10.129.0.28 |
 +----------------------+---------+---------------+---------+----------------+-------------+
 
 
