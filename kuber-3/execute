@@ -1,0 +1,7 @@
+kubectl config get-contexts
+
+atman@aurora:/data/kuber-final/kuber-3$ kubectl get pods --namespace=app -o wide
+
+atman@aurora:/data/kuber-final/kuber-3$ kubectl get networkpolicy --namespace=app
+
+kubectl apply -f manifests/np_backend.yml

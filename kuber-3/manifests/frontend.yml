@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: app
+  labels:
+    app: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+
+    spec:
+      # hostNetwork: true
+      # tolerations:
+      # - operator: Exists
+      #   effect: NoSchedule
+      # volumes:
+      # - name: n-m
+      #   emptyDir: {}
+      containers:
+      - name: network-multitool
+        image: wbitt/network-multitool
+        env:
+        - name: HTTP_PORT
+          value: "80"
+        - name: HTTPS_PORT
+          value: "443"
+        ports:
+        - containerPort: 80
+          name: http-port
+        - containerPort: 443
+          name: https-port
+        resources:
+          requests:
+            cpu: "1m"
+            memory: "20Mi"
+          limits:
+            cpu: "10m"
+            memory: "20Mi"
+        # securityContext:
+        #   runAsUser: 0
+        #   capabilities:
+        #     add: ["NET_ADMIN"]
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-sv
+  namespace: app
+spec:
+  selector:
+    app: frontend
+  ports:
+    - name: http-port
+      targetPort: 80
+      port: 80
+    #protocol: TCP
+  #type: NodePort
+  # type: ClusterIP
