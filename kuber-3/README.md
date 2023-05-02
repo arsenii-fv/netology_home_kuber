@@ -56,15 +56,17 @@ atman@aurora:/data/kuber-final/kuber-3$ kubectl exec backend-5998747998-rjlfj  -
 1WBITT Network MultiTool (with NGINX) - cache-748b48969b-9zbwm - 10.233.116.76 - HTTP: 80 , HTTPS: 443 . (Formerly praqma/network-multitool)
 00   140  100   140    0     0    349      0 --:--:-- --:--:-- --:--:-- 35000
 
+atman@aurora:/data/kuber-final/kuber-3$ kubectl exec cache-748b48969b-mr2hr   --namespace=app -- curl backend-sv
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0^C
+atman@aurora:/data/kuber-final/kuber-3$ kubectl exec cache-748b48969b-mr2hr   --namespace=app -- curl frontend-sv
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:--  0:00:03 --:--:--     0^C
 ```
 ### Правила приема работы
 
 1. Домашняя работа оформляется в своем Git репозитории в файле README.md. Выполненное домашнее задание пришлите ссылкой на .md-файл в вашем репозитории.
 2. Файл README.md должен содержать скриншоты вывода необходимых команд, а также скриншоты результатов
 3. Репозиторий должен содержать тексты манифестов или ссылки на них в файле README.md
-
-atman@aurora:/data/kuber-final/kuber-3$ kubectl get pods --namespace=app -o wide
-
-atman@aurora:/data/kuber-final/kuber-3$ kubectl get networkpolicy --namespace=app
-
-kubectl apply -f manifests/np_backend.yml
