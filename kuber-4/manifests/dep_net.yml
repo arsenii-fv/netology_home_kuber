@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-multy-deployment
+  labels:
+    app: nginx-multy
+spec:
+  replicas: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 20%
+      maxUnavailable: 25%
+
+  selector:
+    matchLabels:
+      app: nginx-multy
+  template:
+    metadata:
+      labels:
+        app: nginx-multy
+
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.28
+          ports:
+          - containerPort: 80
+          resources:
+            requests:
+              cpu: "1m"
+              memory: "20Mi"
+            limits:
+              cpu: "10m"
+              memory: "20Mi"
+
+        - name: network-multitool
+          image: wbitt/network-multitool
+          env:
+            - name: HTTP_PORT
+              value: "1180"
+            - name: HTTPS_PORT
+              value: "11443"
+          ports:
+          - containerPort: 1180
+            name: http-port
+          - containerPort: 11443
+            name: https-port
+          resources:
+            requests:
+              cpu: "1m"
+              memory: "20Mi"
+            limits:
+              cpu: "10m"
+              memory: "20Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-multy-svc
+#  namespace: default
+spec:
+  selector:
+    app: nginx-multy
+  ports:
+  - name: service-port
+    targetPort: 80 # echoserver-web
+    port: 80
+    #protocol: TCP
+    # imagePullPolicy: IfNotPresent
