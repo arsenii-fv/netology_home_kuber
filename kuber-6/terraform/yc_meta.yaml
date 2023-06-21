@@ -1,0 +1,8 @@
+#cloud-config
+users:
+  - name: aris
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAAqp/shSGXkQPdHQ0XGh8kgjQjWSUkZxoTIrbOMzEcNrpNDrr7DyB0UoMKq5O5Yp9u/WabPaFWzbkuammRzWBiFeAEoNJO4uHK5b9bJjbrxf4B1B6NdhDbTblwqMd7kHfyHHymJCmiWQdXvxhiHeNB34N/QSP+0HEaD/Hi6z/NCCzvQEA== atman@aurora
