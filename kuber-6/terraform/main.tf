@@ -10,9 +10,10 @@ terraform {
 
 // Configure the Yandex.Cloud provider
 provider "yandex" {
-  token                    = ""
-  cloud_id                 = "b1ggd91hcfeoail8q0fac"
-  folder_id                = "b1gvetnsqbtt8d0csfb6l"
+   token                    = ""
+  //service_account_key_file = "path_to_service_account_key_file"
+  cloud_id                 = "b1gg91hcfeoail8q0fat"
+  folder_id                = "b1gvtnsqbtt8d0csfb6r"
   // zone                     = "var.yc_region_here"
 }
 
@@ -99,11 +100,10 @@ resource "yandex_compute_instance" "public" {
 //Создать в vpc subnet с названием private, сетью 192.168.20.0/24.
 
 resource "yandex_vpc_subnet" "private" {
- //name = "private"
+ name = "private"
  v4_cidr_blocks = ["192.168.20.0/24"]
  zone = "ru-central1-a"
  network_id = yandex_vpc_network.zero-net.id
-
  route_table_id = yandex_vpc_route_table.lab-rt-a.id
 
 }
@@ -115,7 +115,8 @@ resource "yandex_vpc_route_table" "lab-rt-a" {
 
   static_route {
     destination_prefix = "0.0.0.0/0"
-    next_hop_address   =  yandex_compute_instance.nat.network_interface.0.ip_address
+    next_hop_address   =  "192.168.10.254"
+    //yandex_compute_instance.nat.network_interface.0.ip_address
     //"192.168.10.254"
 
   }
@@ -142,7 +143,7 @@ resource "yandex_compute_instance" "private" {
 
  network_interface {
  subnet_id = yandex_vpc_subnet.private.id
- nat = true
+ nat = false
  ip_address = "192.168.20.4"
  }
 

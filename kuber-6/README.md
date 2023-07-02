@@ -19,32 +19,36 @@
  - Создать в этой подсети NAT-инстанс, присвоив ему адрес 192.168.10.254. В качестве image_id использовать fd80mrhj8fl2oe87o4e1.
  - Создать в этой публичной подсети виртуалку с публичным IP, подключиться к ней и убедиться, что есть доступ к интернету.
 ```bash
-atman@aurora:/data/kuber-final/kuber-6/terraform$ ssh aris@51.250.95.193
-The authenticity of host '51.250.95.193 (51.250.95.193)' can't be established.
-ECDSA key fingerprint is SHA256:efKeS9qreElxsbVTopfnLsJD6JgMZ5pTQJ3JXXgmWBA.
-Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-Warning: Permanently added '51.250.95.193' (ECDSA) to the list of known hosts.
-Welcome to Ubuntu 18.04.1 LTS (GNU/Linux 4.15.0-29-generic x86_64)
+atman@aurora:/data/kuber-final/kuber-6/terraform$ terraform plan
+yandex_vpc_network.zero-net: Refreshing state... [id=enpps3rc9arq6bm2tfvt]
+yandex_vpc_subnet.public: Refreshing state... [id=e9b3ga8o427i9muvvnlq]
+yandex_vpc_route_table.lab-rt-a: Refreshing state... [id=enpfcjb0kt9547a7r177]
+yandex_vpc_subnet.private: Refreshing state... [id=e9buede5v6qu0nj5b5kj]
+yandex_compute_instance.public: Refreshing state... [id=fhmkmr2oc6h9aftslri7]
+yandex_compute_instance.nat: Refreshing state... [id=fhmcbccvc6und3e63408]
+yandex_compute_instance.private: Refreshing state... [id=fhm53ikmup6mu6tie1ct]
+No changes. Your infrastructure matches the configuration.
+Terraform has compared your real infrastructure against your configuration and found no differences, so no changes are needed.
+atman@aurora:/data/kuber-final/kuber-6/terraform$ terraform apply
+
+atman@aurora:/data/kuber-final/kuber-6/terraform$ ssh aris@51.250.85.254
+
 aris@inst-pub:~$ ping ya.ru
-PING ya.ru (77.88.55.242) 56(84) bytes of data.
-64 bytes from ya.ru (77.88.55.242): icmp_seq=1 ttl=58 time=3.94 ms
-64 bytes from ya.ru (77.88.55.242): icmp_seq=2 ttl=58 time=3.49 ms
-64 bytes from ya.ru (77.88.55.242): icmp_seq=3 ttl=58 time=3.60 ms
+PING ya.ru (5.255.255.242) 56(84) bytes of data.
+64 bytes from ya.ru (5.255.255.242): icmp_seq=1 ttl=58 time=0.731 ms
+64 bytes from ya.ru (5.255.255.242): icmp_seq=2 ttl=58 time=0.338 ms
+64 bytes from ya.ru (5.255.255.242): icmp_seq=3 ttl=58 time=0.332 ms
 ^C
-aris@inst-pub:~$ ip a
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-    inet 127.0.0.1/8 scope host lo
-       valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host
-       valid_lft forever preferred_lft forever
-2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
-    link/ether d0:0d:22:04:29:c3 brd ff:ff:ff:ff:ff:ff
-    inet 192.168.10.4/24 brd 192.168.10.255 scope global eth0
-       valid_lft forever preferred_lft forever
-    inet6 fe80::d20d:22ff:fe04:29c3/64 scope link
-       valid_lft forever preferred_lft forever
+--- ya.ru ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2025ms
+rtt min/avg/max/mdev = 0.332/0.467/0.731/0.186 ms
+
+aris@inst-pub:~$ ip route
+default via 192.168.10.1 dev eth0 proto dhcp src 192.168.10.4 metric 100
+192.168.10.0/24 dev eth0 proto kernel scope link src 192.168.10.4
+192.168.10.1 dev eth0 proto dhcp scope link src 192.168.10.4 metric 100
 ```
+![Виртуальные машины](/pictures/vm.png)
 
 3. Приватная подсеть.
  - Создать в VPC subnet с названием private, сетью 192.168.20.0/24.
@@ -52,13 +56,48 @@ aris@inst-pub:~$ ip a
  - Создать в этой приватной подсети виртуалку с внутренним IP, подключиться к ней через виртуалку, созданную ранее, и убедиться, что есть доступ к интернету.
 
 ```bash
- aris@inst-priv:~$ ping ya.ru
-PING ya.ru (77.88.55.242) 56(84) bytes of data.
-64 bytes from ya.ru (77.88.55.242): icmp_seq=1 ttl=58 time=3.91 ms
-64 bytes from ya.ru (77.88.55.242): icmp_seq=2 ttl=58 time=3.51 ms
-64 bytes from ya.ru (77.88.55.242): icmp_seq=3 ttl=58 time=3.50 ms
-64 bytes from ya.ru (77.88.55.242): icmp_seq=4 ttl=58 time=3.52 ms
+aris@inst-pub:~$ ssh aris@192.168.20.4
+
+aris@inst-priv:~$ ping ya.ru
+PING ya.ru (5.255.255.242) 56(84) bytes of data.
+64 bytes from ya.ru (5.255.255.242): icmp_seq=1 ttl=58 time=0.611 ms
+64 bytes from ya.ru (5.255.255.242): icmp_seq=2 ttl=58 time=0.405 ms
+64 bytes from ya.ru (5.255.255.242): icmp_seq=3 ttl=58 time=0.373 ms
+64 bytes from ya.ru (5.255.255.242): icmp_seq=4 ttl=58 time=0.333 ms
+^C
+--- ya.ru ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3036ms
+rtt min/avg/max/mdev = 0.333/0.430/0.611/0.109 ms
+
+aris@inst-priv:~$ sudo traceroute 8.8.8.8
+traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
+ 1  _gateway (192.168.20.1)  1.225 ms  1.216 ms  1.345 ms
+ 2  * * *
+ 3  * * *
+ 4  100.64.0.101 (100.64.0.101)  2.455 ms  2.371 ms  2.443 ms
+ 5  * * *
+ 6  109.239.136.60 (109.239.136.60)  13.452 ms google.msk.piter-ix.net (185.0.12.11)  5.008 ms 185.232.60.148 (185.232.60.148)  19.552 ms
+ 7  108.170.250.51 (108.170.250.51)  20.818 ms 108.170.250.130 (108.170.250.130)  5.365 ms 108.170.250.51 (108.170.250.51)  20.696 ms
+ 8  172.253.66.116 (172.253.66.116)  20.697 ms 108.170.250.129 (108.170.250.129)  5.091 ms 216.239.46.254 (216.239.46.254)  4.559 ms
+ 9  66.249.95.224 (66.249.95.224)  18.690 ms 172.253.65.159 (172.253.65.159)  16.602 ms 142.251.238.68 (142.251.238.68)  19.531 ms
+10  72.14.234.54 (72.14.234.54)  45.337 ms 142.250.238.214 (142.250.238.214)  23.358 ms 216.239.49.115 (216.239.49.115)  23.405 ms
+11  * * *
+12  * 172.253.79.115 (172.253.79.115)  19.231 ms *
+13  * * *
+14  * * *
+15  * * *
+16  * * *
+17  * * *
+18  * * *
+19  * * dns.google (8.8.8.8)  18.953 ms
 ```
+![Подсети](/pictures/sky-net.png)
+![Таблица маршрутизации](/pictures/route.png)
+```bash
+atman@aurora:/data/kuber-final/kuber-6/terraform$ terraform destroy -auto-approve
+Destroy complete! Resources: 7 destroyed.
+```
+
 
 Resource Terraform для Yandex Cloud:
 
