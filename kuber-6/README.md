@@ -48,7 +48,7 @@ default via 192.168.10.1 dev eth0 proto dhcp src 192.168.10.4 metric 100
 192.168.10.0/24 dev eth0 proto kernel scope link src 192.168.10.4
 192.168.10.1 dev eth0 proto dhcp scope link src 192.168.10.4 metric 100
 ```
-![Виртуальные машины](/pictures/vm.png)
+![Виртуальные машины](pictures/vm.png)
 
 3. Приватная подсеть.
  - Создать в VPC subnet с названием private, сетью 192.168.20.0/24.
@@ -91,8 +91,8 @@ traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
 18  * * *
 19  * * dns.google (8.8.8.8)  18.953 ms
 ```
-![Подсети](/pictures/sky-net.png)
-![Таблица маршрутизации](/pictures/route.png)
+![Подсети](pictures/sky-net.png)
+![Таблица маршрутизации](pictures/route.png)
 ```bash
 atman@aurora:/data/kuber-final/kuber-6/terraform$ terraform destroy -auto-approve
 Destroy complete! Resources: 7 destroyed.
